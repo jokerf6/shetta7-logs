@@ -1,0 +1,341 @@
+<div class="container-fluid">
+  <div class="row row-deck pt-5">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="nav-tabs-alt">
+              <ul class="nav nav-tabs" role="tablist">
+              
+                    <% views.forEach(function (view) { %>
+                      <li class="nav-item" role="presentation">
+                        <a class="nav-link<%= (view.name === activeTab) ? ' active' : '' %>"
+                          href="?tab=<%= view.name %>">
+                          <%= view.name %>
+                        </a>
+                      </li>
+                      <% }) %>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table card-table table-vcenter text-nowrap datatable">
+            <thead>
+              <tr>
+                <th>S</th>
+                <th>W</th>
+                <th>
+                  Name
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="24"
+                    height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M18 15l-6 -6l-6 6h12" transform="rotate(180 12 12)"></path>
+                  </svg>
+                </th>
+                <th>Last Success</th>
+                <th>Last Failure</th>
+                <th>Last Duration</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% apps.filter(app=> app.view.includes(activeTab))
+                .forEach(function (app) { %> <tr>
+                  <td>
+                    <% if(app.status==="success" ){ %>
+                      <svg xmlns="http://www.w3.org/2000/svg"
+                        class="icon text-green icon-tabler icon-tabler-circle-check" width="24" height="24"
+                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <path d="M9 12l2 2l4 -4"></path>
+                      </svg>
+                      <% } else if(app.status==="failure" ){ %>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon text-red icon-tabler icon-tabler-circle-x"
+                          width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <circle cx="12" cy="12" r="9"></circle>
+                          <path d="M10 10l4 4m0 -4l-4 4"></path>
+                        </svg>
+                        <% } %>
+                  </td>
+                  <td>
+                    <% if(app.weather==="sun" ){ %>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon text-orange icon-tabler icon-tabler-sun"
+                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path
+                          d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -13.5l-.7 -.7m12.9 -.05l.7 .7m-12.9 .05l-.7 .7m12.9 -.05l.7 .7">
+                        </path>
+                      </svg>
+                      <% } else if(app.weather==="rain" ){ %>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                          class="icon text-blue icon-tabler icon-tabler-cloud-rain" width="24" height="24"
+                          viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                          stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M7 18a4.6 4.6 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-12"></path>
+                          <path d="M11 13v.01"></path>
+                          <path d="M11 16v.01"></path>
+                          <path d="M11 19v.01"></path>
+                        </svg>
+                        <% } %>
+                  </td>
+                  <td>
+                    <%= app.name %>
+                  </td>
+                  <td>
+                    <%= app.lastSuccessTime %>
+                      <a href="#">
+                        <%= app.lastSuccessRun %>
+                      </a>
+                  </td>
+                  <td>
+                    <%= app.lastFailureTime %>
+                      <a href="#">
+                        <%= app.lastFailureRun %>
+                      </a>
+                  </td>
+                  <td>
+                    <%= app.lastDuration %>
+                  </td>
+                  <td>
+                    <div class="d-flex justify-content-end">
+                      <a href="/apps/<%= app.name %>#logs" class="btn btn-icon btn-dark me-1" title="View Logs">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text"
+                          width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                          <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                          <line x1="9" y1="9" x2="10" y2="9"></line>
+                          <line x1="9" y1="13" x2="15" y2="13"></line>
+                          <line x1="9" y1="17" x2="15" y2="17"></line>
+                        </svg>
+                      </a>
+                      <button class="btn btn-icon btn-green me-1" title="Reload"
+                        onclick="pm2AppAction('<%= app.name %>', 'reload')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24"
+                          height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"></path>
+                          <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
+                        </svg>
+                      </button>
+                      <button class="btn btn-icon btn-cyan me-1" title="Restart"
+                        onclick="pm2AppAction('<%= app.name %>', 'restart')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-rotate-clockwise-2"
+                          width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M9 4.55a8 8 0 0 1 6 14.9m0 -4.45v5h5"></path>
+                          <line x1="5.63" y1="7.16" x2="5.63" y2="7.17"></line>
+                          <line x1="4.06" y1="11" x2="4.06" y2="11.01"></line>
+                          <line x1="4.63" y1="15.1" x2="4.63" y2="15.11"></line>
+                          <line x1="7.16" y1="18.37" x2="7.16" y2="18.38"></line>
+                          <line x1="11" y1="19.94" x2="11" y2="19.95"></line>
+                        </svg>
+                      </button>
+                      <button class="btn btn-icon btn-danger" title="Stop"
+                        onclick="pm2AppAction('<%= app.name %>', 'stop')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-minus"
+                          width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                          <circle cx="12" cy="12" r="9"></circle>
+                          <line x1="9" y1="12" x2="15" y2="12"></line>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <% })%>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal modal-blur fade" id="logsModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logsModalTitle">
+          Logs for <span id="logAppName"></span> (<span id="logTypeTitle"></span>)
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex mb-3">
+          <button class="btn btn-sm btn-outline-primary me-2" onclick="switchLogType('stdout')">
+            Stdout
+          </button>
+          <button class="btn btn-sm btn-outline-danger" onclick="switchLogType('stderr')">
+            Stderr
+          </button>
+          <button class="btn btn-sm btn-outline-secondary ms-auto" onclick="loadMoreLogs()">
+            Load More
+          </button>
+        </div>
+        <pre id="logContent"></pre>
+        <div id="loadingIndicator" class="text-center" style="display: none">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading logs...</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn me-auto" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+
+  <script>
+    let currentAppName = null;
+    let currentLogType = "stdout";
+    let currentNextKey = null; // For pagination of logs
+
+    // Function for app actions (restart, reload, stop) - remains the same
+    function pm2AppAction(appName, action) {
+      console.log(`Attempting to ${action} app: ${appName}`);
+
+      let url = `/api/apps/${appName}/${action}`;
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then((errorData) => {
+              throw new Error(
+                errorData.error || `HTTP error! status: ${response.status}`
+              );
+            });
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.success) {
+            alert(`${action} successful for ${appName}!`);
+            location.reload();
+          } else {
+            alert(
+              `${action} failed for ${appName}: ${data.message || "Unknown error."
+              }`
+            );
+            console.error(`${action} failed:`, data.error);
+          }
+        })
+        .catch((error) => {
+          console.error("Error performing PM2 action:", error);
+          alert(
+            `An error occurred while trying to ${action} ${appName}. ${error.message || ""
+            }`
+          );
+        });
+    }
+
+    // Function to fetch and display logs
+    async function fetchAndDisplayLogs(
+      appName,
+      logType,
+      nextKey = null,
+      append = false
+    ) {
+      currentAppName = appName;
+      currentLogType = logType;
+
+      const logContentElement = document.getElementById("logContent");
+      const loadingIndicator = document.getElementById("loadingIndicator");
+
+      if (!append) {
+        logContentElement.innerHTML = ""; // Clear logs if not appending
+        currentNextKey = null; // Reset pagination for new type/app
+      }
+      loadingIndicator.style.display = "block"; // Show loading indicator
+
+      document.getElementById("logAppName").textContent = appName;
+      document.getElementById("logTypeTitle").textContent = logType.toUpperCase();
+
+      let url = `/api/apps/${appName}/logs/${logType}`;
+      if (nextKey) {
+        url += `?nextKey=${nextKey}`; // Assuming backend uses nextKey for pagination
+      }
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(
+            errorData.error || `HTTP error! status: ${response.status}`
+          );
+        }
+        const data = await response.json();
+
+        if (data.logs && data.logs.lines) {
+          if (append) {
+            // Append new logs to the top (assuming logs are reversed)
+            logContentElement.innerHTML =
+              data.logs.lines + logContentElement.innerHTML;
+          } else {
+            logContentElement.innerHTML = data.logs.lines;
+          }
+          currentNextKey = data.logs.nextKey; // Update nextKey for further pagination
+        } else {
+          logContentElement.innerHTML = "No logs available.";
+        }
+      } catch (error) {
+        console.error("Error fetching logs:", error);
+        logContentElement.innerHTML = `Error loading logs: ${error.message}`;
+      } finally {
+        loadingIndicator.style.display = "none"; // Hide loading indicator
+      }
+    }
+
+    // Function called by the "View Logs" button
+    async function viewAppLogs(appName, initialLogType = "stdout") {
+      const logsModal = new bootstrap.Modal(document.getElementById("logsModal"));
+      logsModal.show();
+      // Fetch and display initial logs (stdout by default)
+      await fetchAndDisplayLogs(appName, initialLogType);
+    }
+
+    // Function to switch between stdout and stderr logs in the modal
+    async function switchLogType(newLogType) {
+      if (currentAppName) {
+        await fetchAndDisplayLogs(currentAppName, newLogType);
+      }
+    }
+
+    // Function to load more logs (for pagination)
+    async function loadMoreLogs() {
+      if (currentAppName && currentNextKey) {
+        // Fetch logs and append them. The backend's readLogsReverse implies it returns older logs.
+        await fetchAndDisplayLogs(
+          currentAppName,
+          currentLogType,
+          currentNextKey,
+          true
+        );
+      } else if (!currentNextKey) {
+        alert("No more logs to load.");
+      }
+    }
+  </script>
