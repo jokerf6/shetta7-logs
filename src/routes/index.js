@@ -107,23 +107,25 @@ router.get("/apps", isAuthenticated, async (ctx) => {
   }));
   const views = [];
   for (let i = 0; i < result.length; i++) {
-    if (result[i].name[0] === '"') {
+    if (
+      result[i].name[result[i].name.length - 1] === '"' &&
+      result[i].name[0] === '"'
+    ) {
+      views.push({
+        id: result[i].id,
+        name: result[i].name.slice(1, result[i].name.length - 1),
+      });
+    } else if (result[i].name[0] === '"') {
       views.push({
         id: result[i].id,
         name: result[i].name.slice(1),
       });
-    }
-    if (result[i].name[result[i].name.length - 1] === '"') {
+    } else if (result[i].name[result[i].name.length - 1] === '"') {
       views.push({
         id: result[i].id,
         name: result[i].name.slice(0, result[i].name.length - 1),
       });
-    }
-    if (
-      result[i].name[result[i].name.length - 1] !== '"' &&
-      result[i].name[0] !== '"'
-    )
-      views.push(result[i]);
+    } else views.push(result[i]);
   }
 
   const { tab } = ctx.query;
